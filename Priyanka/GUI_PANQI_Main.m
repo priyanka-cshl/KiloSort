@@ -71,6 +71,9 @@ handles.SetUpSession_TotalSessions.Data(1) = 0;
 % reposition GUI
 movegui(hObject,'northwest'); 
 
+% to maintain GUI size across various screen resolutions
+set(handles.figure1,'Units','Normalized');
+
 % Update handles structure
 guidata(hObject, handles);
 
