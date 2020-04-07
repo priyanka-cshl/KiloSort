@@ -1,6 +1,6 @@
 function ops = convertOpenEphysToRawBInaryAnqi(ops)
 
-fname       = ops.fbinary;  %fullfile(ops.root, sprintf('%s.dat', ops.fbinary)); 
+fname       = fullfile(ops.root, sprintf('%s.dat', ops.fbinary)); %ops.fbinary;  %fullfile(ops.root, sprintf('%s.dat', ops.fbinary)); 
 fidout      = fopen(fname, 'w');
 %
 clear fs

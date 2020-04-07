@@ -10,7 +10,8 @@ ops.verbose             = 1; % whether to print command line progress
 ops.showfigures         = 0; % whether to plot figures during optimization		
 		
 ops.datatype            = 'openEphys';  % binary ('dat', 'bin') or 'openEphys'		
-ops.fbinary             = fullfile(fpath,'mybinaryfile.dat'); % will be created for 'openEphys'		
+%ops.fbinary             = fullfile(fpath,'mybinaryfile.dat'); % will be created for 'openEphys'		
+ops.fbinary             = fullfile(fpath,'mybinaryfile'); % will be created for 'openEphys'		
 ops.fproc               = fullfile(fpath,'temp_wh.dat'); % residual from RAM of preprocessed data		
 ops.root                = fpath; % 'openEphys' only: where raw files are		
 		

@@ -13,7 +13,8 @@ if ops.GPU
 end
 
 if strcmp(ops.datatype , 'openEphys')
-   ops = convertOpenEphysToRawBInaryAnqi(ops);  % convert data, only for OpenEphys
+   % ops = convertOpenEphysToRawBInaryAnqi(ops);  % convert data, only for OpenEphys
+   ops = convertOpenEphysToRawBInary(ops);  % convert data, only for OpenEphys
 end
 
 %

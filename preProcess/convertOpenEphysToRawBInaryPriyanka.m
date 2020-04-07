@@ -1,7 +1,7 @@
 function ops = convertOpenEphysToRawBInaryPriyanka(ops)
 [b,a] = butter(3,2*[300 6000]/30000,'bandpass');
 
-fname       = ops.fbinary;  %fullfile(ops.root, sprintf('%s.dat', ops.fbinary)); 
+fname       = fullfile(ops.root, sprintf('%s.dat', ops.fbinary)); %ops.fbinary;  %fullfile(ops.root, sprintf('%s.dat', ops.fbinary)); 
 fidout      = fopen(fname, 'w');
 
 % load channel map if you want to eliminate certain channels from being
