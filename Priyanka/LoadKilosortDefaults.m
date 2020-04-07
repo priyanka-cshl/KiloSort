@@ -30,6 +30,9 @@ switch Username
     case {'MD'}
         handles.FilePaths.Data(1) = {'/mnt/data/Marie'}; % Root storage
         handles.FilePaths.Data(2) = {'N5/'}; % local read/write folder
+    case {'MD_Corsica'}
+        handles.FilePaths.Data(1) = {'/mnt/data'}; % Root storage
+        handles.FilePaths.Data(2) = {'N5/'}; % local read/write folder
         
 end
 end
