@@ -3,10 +3,12 @@ tic;
 uproj = [];
 ops.nt0 	= getOr(ops, {'nt0'}, 61);
 
+%% skip the step below - this is already done in call from the master_file_USER.m
+% if strcmp(ops.datatype , 'openEphys')
+%    ops = convertOpenEphysToRawBInary(ops);  % convert data, only for OpenEphys
+% end
 
-if strcmp(ops.datatype , 'openEphys')
-   ops = convertOpenEphysToRawBInary(ops);  % convert data, only for OpenEphys
-end
+%%
 
 if ~isempty(ops.chanMap)
     if ischar(ops.chanMap)
