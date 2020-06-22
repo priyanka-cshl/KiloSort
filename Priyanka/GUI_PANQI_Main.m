@@ -133,11 +133,15 @@ guidata(hObject, handles);
 
 for i = 1:length(handles.db)   % for each session
     clear rootpath datapath
-    
-    rootpath = char(handles.FilePaths.Data(1));
+
     for j = 1:length(handles.db(i).expts) % for each file within the session
+        rootpath = char(handles.FilePaths.Data(1));
         datapath = fullfile(char(handles.FilePaths.Data(2)),char(handles.db(i).expts(j)));
         run(fullfile(handles.pathToYourConfigFile, handles.YourConfigFile));
+        ops.spkTh = handles.spike_det_settings.Data(2); % spike threshold in standard deviations (4)
+        ops.Nfilt = handles.spike_det_settings.Data(1); % number of clusters to use (2-4 times more than Nchan, should be a multiple of 32)
+        ops.ReFilter = handles.filter2binary.Value;
+        ops.DeadChans = str2num(handles.IgnoreChannels.String);
         
         % override some settings
         if handles.init_from_data.Value
@@ -145,15 +149,15 @@ for i = 1:length(handles.db)   % for each session
         else
             ops.initialize      = 'no';
         end
-        ops.spkTh = handles.spike_det_settings.Data(2); % spike threshold in standard deviations (4)		
-        ops.Nfilt = handles.spike_det_settings.Data(1); % number of clusters to use (2-4 times more than Nchan, should be a multiple of 32) 
+
         disp('');
         disp(['processing session: ',fullfile(rootpath,datapath)]);
-        if handles.filter2binary.Value
-            master_file_PRIYANKA;
-        else
-            master_file_PANQI;
-        end
+        master_file_PRIYANKA;
+%         if handles.filter2binary.Value
+%             master_file_PRIYANKA;
+%         else
+%             master_file_PANQI;
+%         end
     end
 end
 

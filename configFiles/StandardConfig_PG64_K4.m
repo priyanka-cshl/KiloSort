@@ -20,8 +20,6 @@ ops.Nchan               = 64;           % number of active channels (omit if alr
 ops.Nfilt               = 256;           % number of clusters to use (2-4 times more than Nchan, should be a multiple of 32)     		
 ops.nNeighPC            = 4; % visualization only (Phy): number of channnels to mask the PCs, leave empty to skip (12)		
 ops.nNeigh              = 4; % visualization only (Phy): number of neighboring templates to retain projections of (16)		
-		
-ops.DeadChans           = [22 26 41 42 43 45 46 49 50 53 54 55 56 59 60];
 
 % options for channel whitening		
 ops.whitening           = 'full'; % type of whitening (default 'full', for 'noSpikes' set options for spike detection below)		

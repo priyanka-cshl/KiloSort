@@ -15,9 +15,9 @@ ops.fproc               = fullfile(fpath,'temp_wh.dat'); % residual from RAM of 
 ops.root                = fpath; % 'openEphys' only: where raw files are		
 		
 ops.fs                  = 30000;        % sampling rate		(omit if already in chanMap file)
-ops.NchanTOT            = 64;           % total number of channels (omit if already in chanMap file)
-ops.Nchan               = 64;           % number of active channels (omit if already in chanMap file)
-ops.Nfilt               = 256;           % number of clusters to use (2-4 times more than Nchan, should be a multiple of 32)     		
+ops.NchanTOT            = 32;           % total number of channels (omit if already in chanMap file)
+ops.Nchan               = 32;           % number of active channels (omit if already in chanMap file)
+ops.Nfilt               = 64;           % number of clusters to use (2-4 times more than Nchan, should be a multiple of 32)     		
 ops.nNeighPC            = 4; % visualization only (Phy): number of channnels to mask the PCs, leave empty to skip (12)		
 ops.nNeigh              = 4; % visualization only (Phy): number of neighboring templates to retain projections of (16)		
 
@@ -27,7 +27,7 @@ ops.nSkipCov            = 1; % compute whitening matrix from every N-th batch (1
 ops.whiteningRange      = Inf; %4; % how many channels to whiten together (Inf for whole probe whitening, should be fine if Nchan<=32)		
 		
 % define the channel map as a filename (string) or simply san array		
-ops.chanMap             = '/opt/KiloSort/configFiles/chanMapPG64.mat'; % make this file using createChannelMapFile.m		
+ops.chanMap             = '/opt/KiloSort/configFiles/chanMap.mat'; % make this file using createChannelMapFile.m		
 ops.criterionNoiseChannels = 0.2; % fraction of "noise" templates allowed to span all channel groups (see createChannelMapFile for more info). 		
 % ops.chanMap = 1:ops.Nchan; % treated as linear probe if a chanMap file		
 		

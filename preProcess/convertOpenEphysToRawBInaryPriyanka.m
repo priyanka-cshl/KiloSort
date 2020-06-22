@@ -13,6 +13,12 @@ else
     Chans2Omit = [];
 end
 
+if isfield(ops, 'ReFilter')
+    FilterData = ops.ReFilter;
+else
+    FilterData = 0; % default is to not filter the data again
+end
+
 %
 clear fs
 for j = 1:ops.Nchan
@@ -62,24 +68,26 @@ for k = 1:nBlocks
        
         samples         = samples';
         
-%        filter the data
-        for foo = 1:size(samples,1)
-            samples(foo,:) = filter(b,a,samples(foo,:));
-        end
+        if FilterData
+            % filter the data
+            for foo = 1:size(samples,1)
+                samples(foo,:) = filter(b,a,samples(foo,:));
+            end
+            
+            if ~isempty(Chans2Omit)
+                samples(Chans2Omit,:) = NaN;
+            end
+            
+            % compute common average
+            CAR = int16(nanmean(samples,1));
+            % take a specific channel as ref
+            % CAR = samples(20,:);
+            
+            % subtract common average
+            for foo = 1:size(samples,1)
+                samples(foo,:) = samples(foo,:) - CAR;
+            end
         
-        if ~isempty(Chans2Omit)
-            samples(Chans2Omit,:) = NaN;
-        end
-        
-        % compute common average
-        CAR = int16(nanmean(samples,1));
-%         
-%         % take a specific channel as ref
-%         %CAR = samples(20,:);
-%         
-        % subtract common average
-        for foo = 1:size(samples,1)
-            samples(foo,:) = samples(foo,:) - CAR;
         end
         
         if ~isempty(Chans2Omit)
