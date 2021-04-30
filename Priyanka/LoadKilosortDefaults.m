@@ -13,13 +13,23 @@ handles.YourConfigFile = 'StandardConfig_PANQI.m';
 switch Username
     case {'standard'}
     case {'PG32'}
+        handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'}; % Root storage
+        handles.FilePaths.Data(2) = {'J6/'}; % local read/write folder
+        handles.spike_det_settings.Data(1) = 64;
+        handles.filter2binary.Value = 1;
+        handles.YourConfigFile = 'StandardConfig_MARIE_32.m';
     case {'PG64'}
         handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'}; % Root storage
-        handles.FilePaths.Data(2) = {'K1/'}; % local read/write folder
+        handles.FilePaths.Data(2) = {'J4/'}; % local read/write folder
         handles.spike_det_settings.Data(1) = 256;
         handles.filter2binary.Value = 1;
         handles.YourConfigFile = 'StandardConfig_PG64.m';
-
+    case {'PG_APC'}
+        handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'}; % Root storage
+        handles.FilePaths.Data(2) = {'PCX1/'}; % local read/write folder
+        handles.spike_det_settings.Data(1) = 128;
+        handles.filter2binary.Value = 1;
+        handles.YourConfigFile = 'StandardConfig_PG64.m';
     case {'AZ'}
     case {'K4'}
         handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'}; % Root storage

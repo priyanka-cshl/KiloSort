@@ -22,7 +22,7 @@ end
 %
 clear fs
 for j = 1:ops.Nchan
-   fs{j} = dir(fullfile(ops.root, sprintf('*CH%d.continuous', j) ));
+   fs{j} = dir(fullfile(ops.root, sprintf(ops.channeltag, j) ));
 end
 nblocks = cellfun(@(x) numel(x), fs);
 if numel(unique(nblocks))>1

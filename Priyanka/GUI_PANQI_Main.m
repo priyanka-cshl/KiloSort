@@ -142,14 +142,28 @@ for i = 1:length(handles.db)   % for each session
         ops.Nfilt = handles.spike_det_settings.Data(1); % number of clusters to use (2-4 times more than Nchan, should be a multiple of 32)
         ops.ReFilter = handles.filter2binary.Value;
         ops.DeadChans = str2num(handles.IgnoreChannels.String);
-        
+        ops.channeltag = '*CH%d.continuous';
         % override some settings
         if handles.init_from_data.Value
             ops.initialize      = 'fromData';
         else
             ops.initialize      = 'no';
         end
-
+        
+        % check whether the data is saved in a subfolder or not
+        if isempty(dir(fullfile(ops.root, sprintf('*.continuous') )))
+            % check whether the data is saved in a subfolder or not
+            foo = dir(fullfile(ops.root, sprintf('Record Node *')));
+            ops.root = fullfile(ops.root, foo.name);
+            % check whats the filesaving format
+            ops.channeltag = '*_%d.continuous';
+            if isempty(dir(fullfile(ops.root, sprintf(ops.channeltag, 1) )))
+                ops.channeltag = '*_CH%d.continuous';
+            end
+            [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
+            ops.fbinary = fullfile(binarypath, foo.name, strcat(binaryfile,ext));
+        end
+        
         disp('');
         disp(['processing session: ',fullfile(rootpath,datapath)]);
         master_file_PRIYANKA;
