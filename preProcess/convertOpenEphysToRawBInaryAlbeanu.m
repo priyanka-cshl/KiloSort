@@ -1,14 +1,14 @@
 function ops = convertOpenEphysToRawBInaryAlbeanu(ops)
-[b,a] = butter(3,2*[300 6000]/30000,'bandpass');
+
+if isfield(ops,'fslow')&&ops.fslow<ops.fs/2
+    [b, a] = butter(3, [ops.fshigh/ops.fs,ops.fslow/ops.fs]*2, 'bandpass');
+else
+    [b, a] = butter(3, ops.fshigh/ops.fs*2, 'high');
+end
+%[b,a] = butter(3,2*[300 6000]/30000,'bandpass');
 
 fname       = ops.fbinary;  %fullfile(ops.root, sprintf('%s.dat', ops.fbinary)); 
 fidout      = fopen(fname, 'w');
-
-if isfield(ops, 'ReFilter')
-    FilterData = ops.ReFilter;
-else
-    FilterData = 0; % default is to not filter the data again
-end
 
 %
 clear fs
@@ -56,11 +56,8 @@ for k = 1:nBlocks
         if flag==0
             samples = samples(1:s*nSamples, :);
         end
-       
-        samples         = samples';
         
-        if FilterData
-            samples = samples';
+        if ops.ReFilter
             % filter the data
             samples = filter(b,a,samples);
             samples = flipud(samples);
@@ -69,9 +66,10 @@ for k = 1:nBlocks
             if ops.CAR
                 samples = samples - mean(samples(:,find(ops.ValidChannels)),2);
             end
-            samples = samples';
         end
-
+        
+        samples         = samples';
+        
         % write to binary file
         fwrite(fidout, samples, 'int16');
 
