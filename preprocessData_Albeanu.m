@@ -149,12 +149,12 @@ while 1
     datr = flipud(datr);
     
     % compute CAR and ignore noisy channels if any
-    if ops.CAR
-        datr = datr - mean(datr(:,find(ops.ValidChannels)),2);
-    end
+%     if ops.CAR
+%         datr = datr - mean(datr(:,find(ops.ValidChannels)),2);
+%     end
     
-    % zero out any invalid channels
-    datr(:,find(~ops.ValidChannels)) = 0;
+%     % zero out any invalid channels
+%     datr(:,find(~ops.ValidChannels)) = 0;
     
     switch ops.whitening
         case 'noSpikes'
@@ -248,11 +248,15 @@ for ibatch = 1:Nbatch
         dataRAW = single(dataRAW);
         dataRAW = dataRAW(:, chanMapConn);
         
-        datr = filter(b1, a1, dataRAW);
-        datr = flipud(datr);
-        datr = filter(b1, a1, datr);
-        datr = flipud(datr);
-        
+        if ~ops.ReFilter
+            % data has not already been filtered in the preprocessing step
+            datr = filter(b1, a1, dataRAW);
+            datr = flipud(datr);
+            datr = filter(b1, a1, datr);
+            datr = flipud(datr);
+        else
+            datr = dataRAW;
+        end
         datr = datr(ioffset + (1:NT),:);
     end
     
