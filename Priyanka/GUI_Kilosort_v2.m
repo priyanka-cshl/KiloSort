@@ -58,8 +58,6 @@ handles.output = hObject;
 % Load User specific defaults 
 if ~isempty(varargin)
     handles = LoadKilosortDefaults(handles, varargin{1});
-else
-    handles = LoadKilosortDefaults(handles, 'standard');
 end
 
 handles.SetUpSession_TotalSessions.Data(1) = 0;

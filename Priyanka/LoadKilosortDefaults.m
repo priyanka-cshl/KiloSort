@@ -4,7 +4,7 @@ addpath(genpath('/opt/KiloSort/')) % path to kilosort folder
 addpath(genpath('/opt/npy-matlab/')) % path to npy-matlab scripts
 
 % default settings
-handles.FilePaths.Data(1) = {'/mnt/data/'}; % Root storage
+handles.FilePaths.Data(1) = {'/mnt/grid-hs/pgupta/EphysData'}; % Root storage
 handles.FilePaths.Data(2) = {'PCX4'}; % local read/write folder
 handles.FilePaths.Data(3) = {'/mnt/data/Sorted/'}; % local read/write folder
 handles.YourConfigFile = '/opt/KiloSort/StandardConfig_Albeanu.m';
