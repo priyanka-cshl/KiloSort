@@ -173,6 +173,7 @@ for i = 1:length(handles.db)   % for each session
         [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
         if ~exist(binarypath,'dir')
             mkdir(binarypath);
+            fileattrib(binarypath,'+w','a');
         end
         
         disp('');
