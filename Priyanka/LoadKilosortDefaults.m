@@ -7,6 +7,7 @@ addpath(genpath('/opt/npy-matlab/')) % path to npy-matlab scripts
 handles.FilePaths.Data(1) = {'/mnt/grid-hs/pgupta/EphysData'}; % Root storage
 handles.FilePaths.Data(2) = {'PCX4'}; % local read/write folder
 handles.FilePaths.Data(3) = {'/mnt/data/Sorted/'}; % local read/write folder
+handles.ServerPath = '/mnt/grid-hs/mdussauz/Smellocator/Processed/Ephys';
 handles.YourConfigFile = '/opt/KiloSort/StandardConfig_Albeanu.m';
 
 % spike detection settings

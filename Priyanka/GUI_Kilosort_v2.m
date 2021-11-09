@@ -171,14 +171,29 @@ for i = 1:length(handles.db)   % for each session
             end
         end
         [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
-        if ~exist(binarypath,'dir')
-            mkdir(binarypath);
-            fileattrib(binarypath,'+w','a');
+        
+        sorted = 0;
+        % check if the session has already been sorted
+        if exist(fullfile(handles.ServerPath,datapath)) || exist(binarypath)
+            reply = input('A local sorting folder for this session already exists. \nDo you want to overwrite? Y/N [Y]: ','s');
+            if ~strcmp(reply,'Y')
+                sorted = 1;
+            end
         end
         
-        disp('');
-        disp(['processing session: ',fullfile(rootpath,datapath)]);
-        master_file_Albeanu;
+        if ~sorted
+            if ~exist(binarypath,'dir')
+                mkdir(binarypath);
+                fileattrib(binarypath,'+w','a');
+            end
+            
+            disp('');
+            disp(['processing session: ',fullfile(rootpath,datapath)]);
+            master_file_Albeanu;
+        else
+            disp('');
+            disp(['skipping session: ',fullfile(rootpath,datapath)]);
+        end
     end
 end
 
