@@ -136,7 +136,12 @@ for i = 1:length(handles.db)   % for each session
         
         % overwrite some of the settings in ops
         ops.ActiveChannels = 1:handles.recording_settings.Data(1);
-        ops.ActiveChannels(eval(handles.InactiveChannels.String)) = [];
+        %ops.ActiveChannels(eval(handles.InactiveChannels.String)) = [];
+        if ~isempty(handles.ReorderChannels)
+            ops.ActiveChannels = handles.ReorderChannels;
+        end
+        [~,notConnected] = ismember(eval(handles.InactiveChannels.String), ops.ActiveChannels);
+        ops.ActiveChannels(notConnected) = [];
         ops.Nchan = numel(ops.ActiveChannels); % number of active channels
         ops.NchanTOT = ops.Nchan;  % we don't use this
         ops.Nfilt = 32*ceil((ops.Nchan*handles.spike_det_settings.Data(1))/32); % number of clusters to use (2-4 times more than Nchan, should be a multiple of 32)    
