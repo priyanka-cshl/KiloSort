@@ -172,7 +172,14 @@ for i = 1:length(handles.db)   % for each session
             % check whats the filesaving format
             ops.channeltag = '*_%d.continuous';
             if isempty(dir(fullfile(ops.root, sprintf(ops.channeltag, 1) )))
-                ops.channeltag = '*_CH%d.continuous';
+                % was it saved as binary?
+                if isempty(dir(fullfile(ops.root, sprintf('experiment*', 1) )))
+                    ops.channeltag = '*_CH%d.continuous';
+                else
+                    ops.datatype = 'dat';
+                    ops.fbinary = fullfile(ops.root,'experiment1/recording1/continuous/Rhythm_FPGA-100.0/continuous.dat');
+                    ops.ReFilter = 0;
+                end 
             end
         end
         [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
