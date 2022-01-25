@@ -164,6 +164,7 @@ for i = 1:length(handles.db)   % for each session
             ops.initialize      = 'no';
         end
         
+        binarypath = [];
         % check whether the data is saved in a subfolder or not
         if isempty(dir(fullfile(ops.root, sprintf('*.continuous') )))
             % check whether the data is saved in a subfolder or not
@@ -176,14 +177,18 @@ for i = 1:length(handles.db)   % for each session
                 if isempty(dir(fullfile(ops.root, sprintf('experiment*', 1) )))
                     ops.channeltag = '*_CH%d.continuous';
                 else
-                    ops.datatype = 'dat';
-                    ops.fbinary = fullfile(ops.root,'experiment1/recording1/continuous/Rhythm_FPGA-100.0/continuous.dat');
-                    ops.ReFilter = 0;
+                    ops.datatype = 'opendat';
+                    ops.rawbinary = fullfile(ops.root,'experiment1/recording1/continuous/Rhythm_FPGA-100.0/continuous.dat');
+                    ops.Nchanbinary = handles.recording_settings.Data(1) + handles.auxchannels;
+%                    ops.ReFilter = 0;
+%                     binarypath = fileparts(ops.root);
+%                     [~, binaryfile, ext] = fileparts(ops.fbinary);
                 end 
             end
         end
-        [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
-        
+        if isempty(binarypath)
+            [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
+        end
         sorted = 0;
         % check if the session has already been sorted
         if exist(fullfile(handles.ServerPath,datapath)) || exist(binarypath)

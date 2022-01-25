@@ -9,6 +9,10 @@ if strcmp(ops.datatype , 'openEphys')
    ops = convertOpenEphysToRawBInaryAlbeanu(ops);  % convert data, only for OpenEphys
 end
 
+if strcmp(ops.datatype , 'opendat')
+   ops = convertOpenEphysBinaryToRawBinaryAlbeanu(ops);  % convert data, only for OpenEphys
+end
+ops.datatype = 'openEphys';
 createChannelMapAlbeanu; % make a temporary chanel map for sorting accounting for which channels are loaded etc
 
 %

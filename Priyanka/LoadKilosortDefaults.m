@@ -26,6 +26,8 @@ handles.InactiveChannels.String = ''; % channels that shouldn't be loaded
 % reorder channels - for the new EIB
 handles.ReorderChannels = [];
 
+handles.auxchannels = []; % only used for binary files
+
 % overwrite settings as per need
 switch Username
     case {'K4'}
@@ -44,12 +46,20 @@ switch Username
     case {'APC1','APC2'}
         handles.FilePaths.Data(1) = {'/mnt/data/Sorted'};
         handles.FilePaths.Data(2) = {Username};
-        handles.recording_settings.Data(1) = 72;
+        handles.recording_settings.Data(1) = 64;
         handles.InactiveChannels.String = mat2str([]);
         handles.IgnoreChannels.String = mat2str([]);
         load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB64');
         %handles.ReorderChannels = EIB64;
-    case {'APC2'}
+    case {'APC1binary'}
+        handles.FilePaths.Data(1) = {'/mnt/data/Sorted'};
+        handles.FilePaths.Data(2) = {'APC1'};
+        handles.recording_settings.Data(1) = 72;
+        handles.auxchannels = 0;
+        handles.InactiveChannels.String = mat2str([]);
+        handles.IgnoreChannels.String = mat2str([61:72]);
+        load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB64');
+        handles.ReorderChannels = horzcat(EIB64, 65:72);
     case {'O5','O3'}
         % handles.FilePaths.Data(1) = {'/mnt/grid-hs/mdussauz/ephysdata/lever_task/BatchO'};
         handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw'};
