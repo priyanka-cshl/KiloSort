@@ -135,7 +135,7 @@ for i = 1:length(handles.db)   % for each session
         run(handles.YourConfigFile);
         
         % overwrite some of the settings in ops
-        ops.ActiveChannels = 1:handles.recording_settings.Data(1);
+        ops.ActiveChannels = 1:(handles.recording_settings.Data(1) - handles.auxchannels);
         %ops.ActiveChannels(eval(handles.InactiveChannels.String)) = [];
         if ~isempty(handles.ReorderChannels)
             ops.ActiveChannels = handles.ReorderChannels;
@@ -177,9 +177,9 @@ for i = 1:length(handles.db)   % for each session
                 if isempty(dir(fullfile(ops.root, sprintf('experiment*', 1) )))
                     ops.channeltag = '*_CH%d.continuous';
                 else
-                    ops.datatype = 'opendat';
-                    ops.rawbinary = fullfile(ops.root,'experiment1/recording1/continuous/Rhythm_FPGA-100.0/continuous.dat');
-                    ops.Nchanbinary = handles.recording_settings.Data(1) + handles.auxchannels;
+                    ops.datatype = 'flatbinary'; %'opendat';
+                    ops.rawbinary = fullfile(ops.root,handles.binarypathtag);
+                    ops.Nchanbinary = handles.recording_settings.Data(1);
 %                    ops.ReFilter = 0;
 %                     binarypath = fileparts(ops.root);
 %                     [~, binaryfile, ext] = fileparts(ops.fbinary);
