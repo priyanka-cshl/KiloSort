@@ -12,11 +12,9 @@ fidout      = fopen(fname, 'w');
 fid_aux_out = fopen(fullfile(fileparts(ops.fbinary),'myauxfile.dat'), 'w');
 
 % read the open ephys flat binary file
-session = Session(fileparts(ops.root));
+session = Session(ops.root);
 TotalSamples = size(session.recordNodes{1}.recordings{1}.continuous('Acquisition_Board-100.Rhythm Data').timestamps,1);
 
-fid         = fopen(ops.rawbinary, 'r');
-NchanTOT    = ops.Nchanbinary;
 NT          = ops.NT ;
 NTbuff      = NT + 4*ops.ntbuff;
 auxchans    = ops.Nchanbinary - ops.Nchan;
@@ -44,10 +42,11 @@ for k = 1:nBlocks
             samples(:, nsampcurr+1:NTbuff) = repmat(samples(:,nsampcurr), 1, NTbuff-nsampcurr);
         end
         
-        % write the aux data to auxbinaryfile
-        fwrite(fid_aux_out, samples(end-auxchans+1:end,:), 'int16');
-        
-        % now delete the aux channels
+        if ops.saveAUXbinaryfile
+            % write the aux data to auxbinaryfile
+            fwrite(fid_aux_out, samples(end-auxchans+1:end,:), 'int16');
+        end
+        % delete the aux channels
         samples(end-auxchans+1:end,:) = [];
         
         samples = samples';
@@ -81,17 +80,19 @@ end
 
 fclose(fidout);
 
-%% extra step - to save in the same folder - TTL data 
-Events = session.recordNodes{1}.recordings{1}.ttlEvents('Acquisition_Board-100.Rhythm Data');
-TTLs.data            = Events.channel;
-TTLs.timestamps      = Events.timestamp;
-TTLs.info.eventId    = Events.state;
+if ops.saveAUXbinaryfile
+    % extra step - to save in the same folder - TTL data
+    Events = session.recordNodes{1}.recordings{1}.ttlEvents('Acquisition_Board-100.Rhythm Data');
+    TTLs.data            = Events.channel;
+    TTLs.timestamps      = Events.timestamp;
+    TTLs.info.eventId    = Events.state;
     
-% to adjust for clock offset between open ephys and kilosort
-TTLs.offset = session.recordNodes{1}.recordings{1}.continuous('Acquisition_Board-100.Rhythm Data').timestamps(1);
-
-save (fullfile(fileparts(ops.fbinary),'myTTLfile.mat'),'TTLs');
-%%
+    % to adjust for clock offset between open ephys and kilosort
+    TTLs.offset = session.recordNodes{1}.recordings{1}.continuous('Acquisition_Board-100.Rhythm Data').timestamps(1);
+    
+    save (fullfile(fileparts(ops.fbinary),'myTTLfile.mat'),'TTLs');
+    %
+end
 
 % hack
 ops.Nchanbinary = ops.Nchan;

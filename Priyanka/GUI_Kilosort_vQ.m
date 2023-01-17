@@ -132,16 +132,26 @@ for i = 1:length(handles.db)   % for each session
         datapath = fullfile(char(handles.FilePaths.Data(2)),char(handles.db(i).expts(j)));
         localpath = fullfile(char(handles.FilePaths.Data(3)),...
             char(handles.FilePaths.Data(2)),char(handles.db(i).expts(j)));
+        
         run(handles.YourConfigFile);
         
         % overwrite some of the settings in ops
-        ops.ActiveChannels = 1:(handles.recording_settings.Data(1) - handles.auxchannels);
-        %ops.ActiveChannels(eval(handles.InactiveChannels.String)) = [];
+        ops.saveAUXbinaryfile = handles.auxTTLsave.Value;
+        
+        % to flag out aux channels from ephys channels
+        ops.ActiveChannels = 1:(handles.recording_settings.Data(1) - handles.recording_settings.Data(2));
+        
+        % to reorder channels if record node was before the channelmap node
         if ~isempty(handles.ReorderChannels)
             ops.ActiveChannels = handles.ReorderChannels;
         end
+        
+        % if useless channels were recorded - skip them from the binary file
         [~,notConnected] = ismember(eval(handles.InactiveChannels.String), ops.ActiveChannels);
         ops.ActiveChannels(notConnected) = [];
+        % not sure the inactive channel works for batch Q
+        
+        % just parse some info to ops the way kilosort likes it
         ops.Nchan = numel(ops.ActiveChannels); % number of active channels
         ops.NchanTOT = ops.Nchan;  % we don't use this
         ops.Nfilt = 32*ceil((ops.Nchan*handles.spike_det_settings.Data(1))/32); % number of clusters to use (2-4 times more than Nchan, should be a multiple of 32)    
@@ -150,49 +160,58 @@ for i = 1:length(handles.db)   % for each session
         ops.ReFilter = handles.filter2binary.Value;
         ops.CAR = handles.computeCAR.Value;
         
-        % create a list of valid channels - accounting for the unloaded
-        % channels
+        % create a list of valid channels - account for the unloaded channels
         ops.DeadChans = eval(handles.IgnoreChannels.String);
         [~,chans2omit] = ismember(ops.DeadChans, ops.ActiveChannels);
         ops.ValidChannels = true(ops.Nchan,1);
         ops.ValidChannels(chans2omit(chans2omit~=0)) = false;
         
-        ops.channeltag = '*CH%d.continuous';
         if handles.init_from_data
             ops.initialize      = 'fromData';
         else
             ops.initialize      = 'no';
         end
         
-        binarypath = [];
-        % check whether the data is saved in a subfolder or not
-        if isempty(dir(fullfile(ops.root, sprintf('*.continuous') )))
-            % check whether the data is saved in a subfolder or not
-            foo = dir(fullfile(ops.root, sprintf('Record Node *')));
-            ops.root = fullfile(ops.root, foo.name);
-            % check whats the filesaving format
-            ops.channeltag = '*_%d.continuous';
-            if isempty(dir(fullfile(ops.root, sprintf(ops.channeltag, 1) )))
-                % was it saved as binary?
-                if isempty(dir(fullfile(ops.root, sprintf('experiment*', 1) )))
-                    ops.channeltag = '*_CH%d.continuous';
-                else
-                    ops.datatype = 'flatbinary'; %'opendat';
-                    ops.rawbinary = fullfile(ops.root,handles.binarypathtag);
-                    ops.Nchanbinary = handles.recording_settings.Data(1);
-%                    ops.ReFilter = 0;
-%                     binarypath = fileparts(ops.root);
-%                     [~, binaryfile, ext] = fileparts(ops.fbinary);
-                end 
-            end
-        end
-        if isempty(binarypath)
+        ops.datatype = 'flatbinary'; %'opendat';
+        ops.Nchanbinary = handles.recording_settings.Data(1);
+                    
+%         binarypath = [];
+%         % check whether the data is saved in a subfolder or not
+%         if isempty(dir(fullfile(ops.root, sprintf('*.continuous') )))
+%             % check whether the data is saved in a subfolder or not
+%             foo = dir(fullfile(ops.root, sprintf('Record Node *')));
+%             ops.root = fullfile(ops.root, foo.name);
+%             % check whats the filesaving format
+%             ops.channeltag = '*_%d.continuous';
+%             if isempty(dir(fullfile(ops.root, sprintf(ops.channeltag, 1) )))
+%                 % was it saved as binary?
+%                 if isempty(dir(fullfile(ops.root, sprintf('experiment*', 1) )))
+%                     ops.channeltag = '*_CH%d.continuous';
+%                 else
+%                     ops.datatype = 'flatbinary'; %'opendat';
+%                     ops.rawbinary = fullfile(ops.root,handles.binarypathtag);
+%                     ops.Nchanbinary = handles.recording_settings.Data(1);
+% %                    ops.ReFilter = 0;
+% %                     binarypath = fileparts(ops.root);
+% %                     [~, binaryfile, ext] = fileparts(ops.fbinary);
+%                 end 
+%             end
+%         end
+%         
+        if ~handles.ConcatenateSessions.Value
             [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
+        else
+            % make a hybrid folder name
+            
         end
+        
+%         if isempty(binarypath)
+%             [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
+%         end
+        
         sorted = 0;
         % check if the session has already been sorted
-        %if exist(fullfile(handles.ServerPath,datapath)) || exist(binarypath)
-        if exist(fullfile(handles.ServerPath,datapath)) || exist(fullfile(binarypath,'mybinaryfile.*')) % PG: it was annoying me that it keeps asking whether i want to sort again just because the folder exists
+        if exist(fullfile(handles.ServerPath,datapath)) || exist(fullfile(binarypath,'mybinaryfile.*'))
             reply = input('A local sorting folder for this session already exists. \nDo you want to overwrite? Y/N [Y]: ','s');
             if ~strcmp(reply,'Y')
                 sorted = 1;
@@ -207,7 +226,7 @@ for i = 1:length(handles.db)   % for each session
             
             disp('');
             disp(['processing session: ',fullfile(rootpath,datapath)]);
-            master_file_Albeanu_vQ;
+            master_file_Albeanu_VQ;
             % change permissions
             command = ['chmod -R 777 ',binarypath];
             system(command);

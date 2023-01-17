@@ -32,12 +32,13 @@ handles.binarypathtag = 'experiment1/recording1/continuous/Rhythm_FPGA-100.0/con
 
 % overwrite settings as per need
 switch Username
-    case {'Q3', 'Q4', 'Q5', 'Q8', 'Q9'}
+    case {'Q3', 'Q4', 'Q5', 'Q8', 'Q9'} % use GUI_Kilosort_vQ
         handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/priyanka/EphysData'};
         %handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'};
         handles.FilePaths.Data(2) = {Username};
         handles.recording_settings.Data(1) = 40+8; % 10 TTs + 8 aux
-        handles.auxchannels = 8;
+        handles.recording_settings.Data(2) = 8; % aux channels
+        %handles.auxchannels = 8;
         handles.InactiveChannels.String = mat2str([]);
         handles.IgnoreChannels.String = mat2str([]);
         %load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB64');

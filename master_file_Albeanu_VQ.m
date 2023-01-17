@@ -17,7 +17,6 @@ if strcmp(ops.datatype , 'flatbinary')
    ops = processOEPSBinary(ops);  % for batchQ: filters and rewrites OEPS binary file to KS binary (only ephys channels), ...
    % also creates an aux binary that contains behavioral data, and creates
    % TTL matrices - later used for alignment with behavior
-   % ops = convertOEPSFlatBinaryToKSBinary_v2(ops);  % convert data, only for OpenEphys
 end
 
 ops.datatype = 'openEphys';
