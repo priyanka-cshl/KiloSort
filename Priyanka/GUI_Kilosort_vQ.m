@@ -126,14 +126,33 @@ guidata(hObject, handles);
 
 for i = 1:length(handles.db)   % for each session
     clear rootpath datapath configpath
-
-    for j = 1:length(handles.db(i).expts) % for each file within the session
+    
+    if handles.ConcatenateSessions.Value
+        uniquesessions = 1;
+    else
+        uniquesessions = length(handles.db(i).expts);
+    end
+    
+    for j = 1:uniquesessions % for each file within the session
         rootpath = char(handles.FilePaths.Data(1));
         datapath = fullfile(char(handles.FilePaths.Data(2)),char(handles.db(i).expts(j)));
-        localpath = fullfile(char(handles.FilePaths.Data(3)),...
-            char(handles.FilePaths.Data(2)),char(handles.db(i).expts(j)));
         
-        run(handles.YourConfigFile);
+        if handles.ConcatenateSessions.Value
+            localpath = fullfile(char(handles.FilePaths.Data(3)),...
+                                 char(handles.FilePaths.Data(2)),...
+                                 cell2mat(cellfun(@(x) ['_',x], handles.db(i).expts, 'UniformOutput', false)) );
+            run(handles.YourConfigFile);
+            for k = 2:length(handles.db(i).expts)
+                ops.root = vertcat(ops.root, ...
+                    fullfile(rootpath,char(handles.FilePaths.Data(2)),...
+                                        char(handles.db(i).expts(k))));
+            end
+        else
+            localpath = fullfile(char(handles.FilePaths.Data(3)),...
+                                 char(handles.FilePaths.Data(2)),...
+                                 char(handles.db(i).expts(j)));
+            run(handles.YourConfigFile);
+        end
         
         % overwrite some of the settings in ops
         ops.saveAUXbinaryfile = handles.auxTTLsave.Value;
@@ -175,43 +194,11 @@ for i = 1:length(handles.db)   % for each session
         ops.datatype = 'flatbinary'; %'opendat';
         ops.Nchanbinary = handles.recording_settings.Data(1);
                     
-%         binarypath = [];
-%         % check whether the data is saved in a subfolder or not
-%         if isempty(dir(fullfile(ops.root, sprintf('*.continuous') )))
-%             % check whether the data is saved in a subfolder or not
-%             foo = dir(fullfile(ops.root, sprintf('Record Node *')));
-%             ops.root = fullfile(ops.root, foo.name);
-%             % check whats the filesaving format
-%             ops.channeltag = '*_%d.continuous';
-%             if isempty(dir(fullfile(ops.root, sprintf(ops.channeltag, 1) )))
-%                 % was it saved as binary?
-%                 if isempty(dir(fullfile(ops.root, sprintf('experiment*', 1) )))
-%                     ops.channeltag = '*_CH%d.continuous';
-%                 else
-%                     ops.datatype = 'flatbinary'; %'opendat';
-%                     ops.rawbinary = fullfile(ops.root,handles.binarypathtag);
-%                     ops.Nchanbinary = handles.recording_settings.Data(1);
-% %                    ops.ReFilter = 0;
-% %                     binarypath = fileparts(ops.root);
-% %                     [~, binaryfile, ext] = fileparts(ops.fbinary);
-%                 end 
-%             end
-%         end
-%         
-        if ~handles.ConcatenateSessions.Value
-            [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
-        else
-            % make a hybrid folder name
-            
-        end
-        
-%         if isempty(binarypath)
-%             [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
-%         end
+        [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
         
         sorted = 0;
         % check if the session has already been sorted
-        if exist(fullfile(handles.ServerPath,datapath)) || exist(fullfile(binarypath,'mybinaryfile.*'))
+        if exist(fullfile(handles.ServerPath,datapath)) || exist(fullfile(binarypath,'mybinaryfile.dat'))
             reply = input('A local sorting folder for this session already exists. \nDo you want to overwrite? Y/N [Y]: ','s');
             if ~strcmp(reply,'Y')
                 sorted = 1;
