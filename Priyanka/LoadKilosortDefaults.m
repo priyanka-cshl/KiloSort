@@ -33,6 +33,7 @@ handles.binarypathtag = 'experiment1/recording1/continuous/Rhythm_FPGA-100.0/con
 % overwrite settings as per need
 switch Username
     case {'Q3', 'Q4', 'Q5', 'Q8', 'Q9'} % use GUI_Kilosort_vQ
+        handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
         handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/priyanka/EphysData'};
         %handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'};
         handles.FilePaths.Data(2) = {Username};

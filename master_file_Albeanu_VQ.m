@@ -20,7 +20,7 @@ if strcmp(ops.datatype , 'flatbinary')
 end
 
 ops.datatype = 'openEphys';
-createChannelMapAlbeanu; % make a temporary chanel map for sorting accounting for which channels are loaded etc
+createChannelMapBatchQ; % make a temporary chanel map for sorting accounting for which channels are loaded etc
 
 %
 [rez, DATA, uproj] = preprocessData_Albeanu(ops); % preprocess data and extract spikes for initialization
