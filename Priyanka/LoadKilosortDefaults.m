@@ -160,6 +160,7 @@ switch Username
         handles.recording_settings.Data(1) = 40;
         handles.InactiveChannels.String = mat2str([]);
         handles.IgnoreChannels.String = mat2str([]);
+        handles.ReorderChannels = [7:-2:1 9:2:63 18:2:32];
 %         load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB32');
 %         handles.ReorderChannels = EIB32;
 
