@@ -27,7 +27,7 @@ handles.InactiveChannels.String = ''; % channels that shouldn't be loaded
 % reorder channels - for the new EIB
 handles.ReorderChannels = [];
 
-handles.auxchannels = []; % only used for binary files
+handles.auxchannels = 0; % only used for binary files
 handles.binarypathtag = 'experiment1/recording1/continuous/Rhythm_FPGA-100.0/continuous.dat';
 
 % overwrite settings as per need
@@ -158,6 +158,15 @@ switch Username
         handles.recording_settings.Data(1) = 44;
         handles.InactiveChannels.String = mat2str([]);
         handles.IgnoreChannels.String = mat2str([]);
+%         load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB32');
+%         handles.ReorderChannels = EIB32;
+        case {'Q5_m'}
+        handles.FilePaths.Data(1) = {'/mnt/grid-hs/mdussauz/ephysdata/Conc_id_exp'};
+        handles.FilePaths.Data(2) = {'Q5'};
+        handles.recording_settings.Data(1) = 40;
+        handles.InactiveChannels.String = mat2str([]);
+        handles.IgnoreChannels.String = mat2str([]);
+        handles.ReorderChannels = [7:-2:1 9:2:63 18:2:32];
 %         load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB32');
 %         handles.ReorderChannels = EIB32;
 
