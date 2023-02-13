@@ -35,7 +35,7 @@ switch Username
     case {'Q3', 'Q4', 'Q5', 'Q8', 'Q9'} % use GUI_Kilosort_vQ
         handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
         handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/priyanka/EphysData'};
-        %handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'};
+        handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw'};
         handles.FilePaths.Data(2) = {Username};
         handles.recording_settings.Data(1) = 40+8; % 10 TTs + 8 aux
         handles.recording_settings.Data(2) = 8; % aux channels
@@ -45,6 +45,12 @@ switch Username
         %load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB64');
         %handles.ReorderChannels = horzcat(EIB64, 65:72);
         handles.binarypathtag = 'experiment1/recording1/continuous/Acquisition_Board-100.Rhythm Data/continuous.dat';
+        if strcmp(Username,'Q4')
+            handles.IgnoreChannels.String = mat2str([16]);
+        end
+        if strcmp(Username,'Q3')
+            handles.IgnoreChannels.String = mat2str([1:7]);
+        end
 %     case {'Q8'}
 %         handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'};
 %         handles.FilePaths.Data(2) = {Username};
