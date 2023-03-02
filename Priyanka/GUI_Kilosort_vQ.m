@@ -169,21 +169,26 @@ for i = 1:length(handles.db)   % for each session
         [~,notConnected] = ismember(eval(handles.InactiveChannels.String), ops.ActiveChannels);
         ops.ActiveChannels(notConnected) = [];
         % not sure the inactive channel works for batch Q
-        
+
         % just parse some info to ops the way kilosort likes it
         ops.Nchan = numel(ops.ActiveChannels); % number of active channels
         ops.NchanTOT = ops.Nchan;  % we don't use this
-        ops.Nfilt = 32*ceil((ops.Nchan*handles.spike_det_settings.Data(1))/32); % number of clusters to use (2-4 times more than Nchan, should be a multiple of 32)    
-        disp(['Setting nTemplates to ',num2str(ops.Nfilt)]);
-        ops.spkTh = handles.spike_det_settings.Data(2); % spike threshold in standard deviations (4)
-        ops.ReFilter = handles.filter2binary.Value;
-        ops.CAR = handles.computeCAR.Value;
         
         % create a list of valid channels - account for the unloaded channels
         ops.DeadChans = eval(handles.IgnoreChannels.String);
         [~,chans2omit] = ismember(ops.DeadChans, ops.ActiveChannels);
         ops.ValidChannels = true(ops.Nchan,1);
         ops.ValidChannels(chans2omit(chans2omit~=0)) = false;
+        
+        %ops.Nfilt = 32*ceil((ops.Nchan*handles.spike_det_settings.Data(1))/32); % number of clusters to use (2-4 times more than Nchan, should be a multiple of 32)   
+        ops.Nfilt = 32*ceil(((ops.Nchan - numel(chans2omit))*handles.spike_det_settings.Data(1))/32); % number of clusters to use (2-4 times more than Nchan, should be a multiple of 32)
+        
+        disp(['Setting nTemplates to ',num2str(ops.Nfilt)]);
+        ops.spkTh = handles.spike_det_settings.Data(2); % spike threshold in standard deviations (4)
+        ops.ReFilter = handles.filter2binary.Value;
+        ops.CAR = handles.computeCAR.Value;
+        
+
         
         if handles.init_from_data
             ops.initialize      = 'fromData';

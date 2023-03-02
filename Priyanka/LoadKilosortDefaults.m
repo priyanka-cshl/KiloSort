@@ -44,6 +44,9 @@ switch Username
         if strcmp(Username, 'Q9')
             handles.IgnoreChannels.String = mat2str([11 22]);
         end
+        if strcmp(Username, 'Q4')
+            handles.IgnoreChannels.String = mat2str([16]);
+        end
     case {'K4'}
         handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'}; % Root storage
         handles.FilePaths.Data(2) = {'K4'}; % Animal Name
