@@ -49,7 +49,7 @@ switch Username
             handles.IgnoreChannels.String = mat2str([16]);
         end
         if strcmp(Username,'Q3')
-            handles.IgnoreChannels.String = mat2str([1:7]);
+            handles.IgnoreChannels.String = mat2str([1:8]);
         end
 %     case {'Q8'}
 %         handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'};
