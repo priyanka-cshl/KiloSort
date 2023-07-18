@@ -35,6 +35,7 @@ switch Username
     case {'Q3', 'Q4', 'Q5', 'Q8', 'Q9'} % use GUI_Kilosort_vQ
         handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
         handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/priyanka/EphysData'};
+        handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw'};
         handles.FilePaths.Data(2) = {Username};
         handles.recording_settings.Data(1) = 40+8; % 10 TTs + 8 aux
         handles.recording_settings.Data(2) = 8; % aux channels
@@ -53,6 +54,15 @@ switch Username
         if strcmp(Username, 'Q5')
             handles.IgnoreChannels.String = mat2str([12 18 19]); % session 22-11-30
         end
+    case {'Q88'}
+        handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
+        handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw'};
+        handles.FilePaths.Data(2) = {Username};
+        handles.recording_settings.Data(1) = 40+8; % 10 TTs + 8 aux
+        handles.recording_settings.Data(2) = 8; % aux channels
+        handles.InactiveChannels.String = mat2str([]);
+        handles.IgnoreChannels.String = mat2str([]);
+        handles.binarypathtag = 'experiment1/recording1/continuous/Acquisition_Board-100.Rhythm Data/continuous.dat';
     case {'K4'}
         handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'}; % Root storage
         handles.FilePaths.Data(2) = {'K4'}; % Animal Name

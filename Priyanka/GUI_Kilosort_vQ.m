@@ -124,6 +124,12 @@ set(hObject,'BackgroundColor','cyan','String','running ...');
 pause(0.5);
 guidata(hObject, handles);
 
+if isfield(handles,'ZeroNoisyChans')
+    ops.ZeroNoisyChans = handles.ZeroNoisyChans.Value;
+else
+    ops.ZeroNoisyChans = 0;
+end
+
 for i = 1:length(handles.db)   % for each session
     clear rootpath datapath configpath
     

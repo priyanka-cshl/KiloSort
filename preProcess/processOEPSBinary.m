@@ -99,8 +99,11 @@ for k = 1:nBlocks
                 if ops.CAR
                     samples = samples - mean(samples(:,find(ValidChannels)),2);
                 end
-                % make noisy channels zero
-                samples(:,find(~ValidChannels)) = 0;
+                
+                if ops.ZeroNoisyChans
+                    % make noisy channels zero
+                    samples(:,find(~ValidChannels)) = 0;
+                end
             end
             
             samples         = samples';
