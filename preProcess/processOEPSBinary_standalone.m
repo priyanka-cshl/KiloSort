@@ -130,10 +130,12 @@ for q = 1:size(OEPSfolder,1)
             samples = samples - mean(samples(:,find(ValidChannels)),2);
         end
         
+        samples = samples';
+        
         switch ignoremode
             case 1
                 % make noisy channels zero
-                samples(:,find(~ValidChannels)) = 0;
+                samples(find(~ValidChannels),:) = 0;
                 
                 % write to binary file
                 fwrite(fidout, samples, 'int16');
@@ -141,16 +143,14 @@ for q = 1:size(OEPSfolder,1)
             case 2
                 % delete noisy channels before writing
                 % write to binary file
-                fwrite(fidout, samples(:,find(ValidChannels)), 'int16');
-                nsamps = nsamps + size(samples(:,find(ValidChannels)),2);
+                fwrite(fidout, samples(find(ValidChannels),:), 'int16');
+                nsamps = nsamps + size(samples(find(ValidChannels),:),2);
             otherwise
                 % write to binary file
                 fwrite(fidout, samples, 'int16');
                 nsamps = nsamps + size(samples,2);
         end
-            
-        samples = samples';
-        
+                    
     end
 end
         
