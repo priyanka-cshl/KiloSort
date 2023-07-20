@@ -28,17 +28,18 @@ session = Session(OEPSfolder(1,:));
 
 %% settings
 fs = session.recordNodes{1}.recordings{1}.info.continuous.sample_rate; % OEPS sampling rate
-NT = session.recordNodes{1}.recordings{1}.info.continuous.num_channels; % total num of channels
-ephysChans = zeros(NT,1);
-for i = 1:NT
+NchaN = session.recordNodes{1}.recordings{1}.info.continuous.num_channels; % total num of channels
+ephysChans = zeros(NchaN,1);
+for i = 1:NchaN
     ephysChans(i,1) = strcmp('uV',session.recordNodes{1}.recordings{1}.info.continuous.channels(i).units);
 end
 
-ntbuff      = 64; % from kilosort: % samples of symmetrical buffer for whitening and spike detection
-NTbuff      = NT + 4*ntbuff;
-auxchans    = numel(find(~ephysChans));
-binarychans = 1:(NT - auxchans);
-ValidChannels = ~ismember(binarychans, badchans);
+ntbuff          = 64; % from kilosort: % samples of symmetrical buffer for whitening and spike detection
+NT              = 32*1024 + ntbuff; % from kilosort
+NTbuff          = NT + 4*ntbuff;
+auxchans        = numel(find(~ephysChans));
+binarychans     = 1:(NchaN - auxchans);
+ValidChannels   = ~ismember(binarychans, badchans);
 
 % for band pass filtering
 fslow   = 6000;
