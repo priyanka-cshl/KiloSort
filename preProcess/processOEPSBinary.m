@@ -90,19 +90,30 @@ for k = 1:nBlocks
             % reorder the channels
             samples = samples(:,ops.ActiveChannels);
             
-            if ops.ReFilter
-                % filter the data
-                samples = filter(b,a,samples);
-                samples = flipud(samples);
-                samples = filter(b,a,samples);
-                samples = flipud(samples);
-                if ops.CAR
-                    samples = samples - mean(samples(:,find(ValidChannels)),2);
-                end
-                % make noisy channels zero
-                samples(:,find(~ValidChannels)) = 0;
-            end
             
+            if ops.preprocess_before_kilosort
+                if ops.ReFilter
+                    % filter the data
+                    samples = filter(b,a,samples);
+                    samples = flipud(samples);
+                    samples = filter(b,a,samples);
+                    samples = flipud(samples);
+                end
+                    
+                if ops.CAR
+                    % samples = samples - mean(samples(:,find(ValidChannels)),2);
+                    
+                    % better CAR - don't subtract the reference either from
+                    % noisy channels - works better if channels are being
+                    % excluded because of shorting etc
+                    samples(:,find(ValidChannels)) = samples(:,find(ValidChannels)) - mean(samples(:,find(ValidChannels)),2);
+                end
+                
+                if ops.ZeroChans
+                    % make noisy channels zero
+                    samples(:,find(~ValidChannels)) = 0;
+                end
+            end
             samples         = samples';
             
             % write to binary file
