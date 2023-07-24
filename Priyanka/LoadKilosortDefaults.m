@@ -38,6 +38,8 @@ switch Username
         handles.FilePaths.Data(2) = {Username};
         handles.recording_settings.Data(1) = 40+8; % 10 TTs + 8 aux
         handles.recording_settings.Data(2) = 8; % aux channels
+        handles.spike_det_settings.Data(1) = 4; % x, number of clusters - x times more than Nchan
+        
         handles.InactiveChannels.String = mat2str([]);
         handles.IgnoreChannels.String = mat2str([]);
         handles.binarypathtag = 'experiment1/recording1/continuous/Acquisition_Board-100.Rhythm Data/continuous.dat';
@@ -53,6 +55,7 @@ switch Username
         if strcmp(Username, 'Q5')
             handles.IgnoreChannels.String = mat2str([12 18 19]); % session 22-11-30
         end
+        
     case {'K4'}
         handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'}; % Root storage
         handles.FilePaths.Data(2) = {'K4'}; % Animal Name
