@@ -145,18 +145,27 @@ while 1
     dataRAW = single(dataRAW);
     dataRAW = dataRAW(:, chanMapConn);
     
-    datr = filter(b1, a1, dataRAW);
-    datr = flipud(datr);
-    datr = filter(b1, a1, datr);
-    datr = flipud(datr);
+    if ~ops.preprocess_before_kilosort
     
-    % compute CAR and ignore noisy channels if any
-%     if ops.CAR
-%         datr = datr - mean(datr(:,find(ops.ValidChannels)),2);
-%     end
+        if ops.ReFilter
+            datr = filter(b1, a1, dataRAW);
+            datr = flipud(datr);
+            datr = filter(b1, a1, datr);
+            datr = flipud(datr);
+        end
+        
+        % compute CAR and ignore noisy channels if any
+        if ops.CAR
+            datr(:,find(ops.ValidChannels)) = datr(:,find(ops.ValidChannels)) - mean(datr(:,find(ops.ValidChannels)),2);
+        end
     
-%     % zero out any invalid channels
-%     datr(:,find(~ops.ValidChannels)) = 0;
+        % zero out any invalid channels
+        if ops.ZeroChans
+            datr(:,find(~ops.ValidChannels)) = 0;
+        end
+    else
+        datr = dataRAW;
+    end
     
     switch ops.whitening
         case 'noSpikes'
@@ -250,16 +259,24 @@ for ibatch = 1:Nbatch
         dataRAW = single(dataRAW);
         dataRAW = dataRAW(:, chanMapConn);
         
-        if ~ops.ReFilter
-            % data has not already been filtered in the preprocessing step
-            datr = filter(b1, a1, dataRAW);
-            datr = flipud(datr);
-            datr = filter(b1, a1, datr);
-            datr = flipud(datr);
+        if ~ops.preprocess_before_kilosort
+            if ops.ReFilter
+                % data has not already been filtered in the preprocessing step
+                datr = filter(b1, a1, dataRAW);
+                datr = flipud(datr);
+                datr = filter(b1, a1, datr);
+                datr = flipud(datr);
+            end
             
             if ops.CAR
-                datr = datr - mean(datr(:,find(ValidChannels)),2);
+                datr(:,find(ValidChannels)) = datr(:,find(ValidChannels)) - mean(datr(:,find(ValidChannels)),2);
             end
+            
+            if ops.ZeroChans
+                % make noisy channels zero
+                datr(:,find(~ValidChannels)) = 0;
+            end
+        
         else
             datr = dataRAW;
         end
