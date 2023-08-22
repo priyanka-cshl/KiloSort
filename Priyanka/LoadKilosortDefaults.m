@@ -45,15 +45,25 @@ switch Username
         handles.binarypathtag = 'experiment1/recording1/continuous/Acquisition_Board-100.Rhythm Data/continuous.dat';
         if strcmp(Username, 'Q9')
             handles.IgnoreChannels.String = mat2str([11 22]);
+            handles.spike_det_settings.Data(2) = -4;
         end
         if strcmp(Username, 'Q4')
             handles.IgnoreChannels.String = mat2str([16]);
+            handles.spike_det_settings.Data(2) = -4;
         end
         if strcmp(Username, 'Q8')
+            %handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q_v2.m');
             handles.IgnoreChannels.String = mat2str([1:3 21:23]);
+            handles.spike_det_settings.Data(2) = -4;
         end
         if strcmp(Username, 'Q5')
-            handles.IgnoreChannels.String = mat2str([12 18 19]); % session 22-11-30
+            %handles.IgnoreChannels.String = mat2str([18]); % session 22-11-30
+            handles.IgnoreChannels.String = mat2str([30]);
+        end
+        if strcmp(Username, 'Q3')
+            handles.IgnoreChannels.String = mat2str([1:8]);
+            handles.spike_det_settings.Data(2) = -4;
+            handles.spike_det_settings.Data(1) = 3;
         end
         
     case {'K4'}
