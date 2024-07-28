@@ -161,6 +161,9 @@ for i = 1:length(handles.db)   % for each session
         end
         
         % overwrite some of the settings in ops
+        %ops.whitening = 'noSpikes';
+        %ops.initialize = 'fromData';
+        
         ops.saveAUXbinaryfile = handles.auxTTLsave.Value;
         
         % to flag out aux channels from ephys channels
@@ -193,8 +196,8 @@ for i = 1:length(handles.db)   % for each session
         ops.spkTh = handles.spike_det_settings.Data(2); % spike threshold in standard deviations (4)
         ops.ReFilter = handles.filter2binary.Value;
         ops.CAR = handles.computeCAR.Value;
-        
-
+        ops.ZeroChans = handles.ZeroNoisyChans.Value;
+        ops.preprocess_before_kilosort = handles.Preprocess_before_KS.Value;
         
         if handles.init_from_data
             ops.initialize      = 'fromData';

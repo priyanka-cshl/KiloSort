@@ -39,30 +39,29 @@ switch Username
         handles.FilePaths.Data(2) = {Username};
         handles.recording_settings.Data(1) = 40+8; % 10 TTs + 8 aux
         handles.recording_settings.Data(2) = 8; % aux channels
+        handles.spike_det_settings.Data(1) = 4; % x, number of clusters - x times more than Nchan
+        
         handles.InactiveChannels.String = mat2str([]);
         handles.IgnoreChannels.String = mat2str([]);
         handles.binarypathtag = 'experiment1/recording1/continuous/Acquisition_Board-100.Rhythm Data/continuous.dat';
         if strcmp(Username, 'Q9')
             handles.IgnoreChannels.String = mat2str([11 22]);
+            handles.spike_det_settings.Data(2) = -4;
         end
         if strcmp(Username, 'Q4')
             handles.IgnoreChannels.String = mat2str([16]);
+            handles.spike_det_settings.Data(2) = -4;
         end
         if strcmp(Username, 'Q8')
+            %handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q_v2.m');
             handles.IgnoreChannels.String = mat2str([1:3 21:23]);
+            handles.spike_det_settings.Data(2) = -4;
         end
         if strcmp(Username, 'Q5')
-            handles.IgnoreChannels.String = mat2str([12 18 19]); % session 22-11-30
+            %handles.IgnoreChannels.String = mat2str([18]); % session 22-11-30
+            handles.IgnoreChannels.String = mat2str([30]);
         end
-    case {'Q88'}
-        handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
-        handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw'};
-        handles.FilePaths.Data(2) = {Username};
-        handles.recording_settings.Data(1) = 40+8; % 10 TTs + 8 aux
-        handles.recording_settings.Data(2) = 8; % aux channels
-        handles.InactiveChannels.String = mat2str([]);
-        handles.IgnoreChannels.String = mat2str([]);
-        handles.binarypathtag = 'experiment1/recording1/continuous/Acquisition_Board-100.Rhythm Data/continuous.dat';
+
     case {'K4'}
         handles.FilePaths.Data(1) = {'/mnt/data/Priyanka'}; % Root storage
         handles.FilePaths.Data(2) = {'K4'}; % Animal Name
