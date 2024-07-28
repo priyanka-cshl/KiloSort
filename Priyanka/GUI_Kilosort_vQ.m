@@ -204,33 +204,46 @@ for i = 1:length(handles.db)   % for each session
         
         ops.datatype = 'flatbinary'; %'opendat';
         ops.Nchanbinary = handles.recording_settings.Data(1);
-                    
-        [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
         
-        sorted = 0;
-        % check if the session has already been sorted
-        if exist(fullfile(handles.ServerPath,datapath)) || exist(fullfile(binarypath,'mybinaryfile.dat'))
-            reply = input('A local sorting folder for this session already exists. \nDo you want to overwrite? Y/N [Y]: ','s');
-            if ~strcmp(reply,'Y')
-                sorted = 1;
+        if strcmp(eventdata.Source.Tag, 'make_config_file')
+            [binarypath, binaryfile, ext] = fileparts(ops.fbinary);
+            
+            sorted = 0;
+            % check if the session has already been sorted
+            if exist(fullfile(handles.ServerPath,datapath)) || exist(fullfile(binarypath,'mybinaryfile.dat'))
+                reply = input('A local sorting folder for this session already exists. \nDo you want to overwrite? Y/N [Y]: ','s');
+                if ~strcmp(reply,'Y')
+                    sorted = 1;
+                end
             end
-        end
-        
-        if ~sorted
+            
+            
+            if ~sorted
+                if ~exist(binarypath,'dir')
+                    mkdir(binarypath);
+                    fileattrib(binarypath,'+w','a');
+                end
+                                
+                disp('');
+                disp(['processing session: ',fullfile(rootpath,datapath)]);
+                master_file_Albeanu_VQ;
+                % change permissions
+                command = ['chmod -R 777 ',binarypath];
+                system(command);
+                
+            else
+                disp('');
+                disp(['skipping session: ',fullfile(rootpath,datapath)]);
+            end
+        else
+            binarypath = fullfile(fileparts(ops.fbinary),'forKS4');
             if ~exist(binarypath,'dir')
                 mkdir(binarypath);
                 fileattrib(binarypath,'+w','a');
             end
-            
             disp('');
-            disp(['processing session: ',fullfile(rootpath,datapath)]);
-            master_file_Albeanu_VQ;
-            % change permissions
-            command = ['chmod -R 777 ',binarypath];
-            system(command);
-        else
-            disp('');
-            disp(['skipping session: ',fullfile(rootpath,datapath)]);
+            disp(['writing binaries for KS4 for session: ',fullfile(rootpath,datapath)]);
+            makeSplitOEPSBinary(ops);            
         end
     end
 end
