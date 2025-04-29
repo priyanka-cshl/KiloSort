@@ -5,8 +5,20 @@ if ops.GPU
     gpuDevice(1); % initialize GPU (will erase any existing GPU arrays)
 end
 
+% check for datatype mismatch if processing old recordings
+if isempty(dir(fullfile(ops.root,'Record*','experiment*')))
+    reply = input('Looks like these are older recordings. \nSwitch datatype to openephys? Y/N [Y]: ','s');
+    if strcmp(reply,'Y')
+        ops.datatype = 'openEphys';
+        foo = dir(fullfile(ops.root, sprintf('Record Node *')));
+        ops.root = fullfile(ops.root, foo.name);
+        % check whats the filesaving format
+        ops.channeltag = '*_%d.continuous';
+    end
+end
+
 if strcmp(ops.datatype , 'openEphys')
-   ops = convertOpenEphysToRawBInaryAlbeanu(ops);  % convert data, only for OpenEphys
+   ops = convertOpenEphysToRawBInaryAlbeanu_vQ(ops);  % convert data, only for OpenEphys
 end
 
 if strcmp(ops.datatype , 'opendat')

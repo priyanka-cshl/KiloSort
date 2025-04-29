@@ -24,6 +24,7 @@ ValidChannels = ops.ValidChannels(1:ops.Nchan);
 
 Files = [];
 
+%%
 tic
 for k = 1:nBlocks
     
@@ -34,6 +35,7 @@ for k = 1:nBlocks
         TotalSamples = size(session.recordNodes{1}.recordings{1}.continuous('Acquisition_Board-100.Rhythm Data').timestamps,1);
         Files.Samples(q) = TotalSamples;
         Files.StartTimestamp(q) = session.recordNodes{1}.recordings{1}.continuous('Acquisition_Board-100.Rhythm Data').timestamps(1);
+        Files.ChBitVolts = session.recordNodes{1}.recordings{1}.info.continuous.channels(1).bit_volts;
         
         if ops.saveAUXbinaryfile
             % extra step - to save in the same folder - TTL data
@@ -44,6 +46,8 @@ for k = 1:nBlocks
             
             % to adjust for clock offset between open ephys and kilosort
             TTLs.offset = session.recordNodes{1}.recordings{1}.continuous('Acquisition_Board-100.Rhythm Data').timestamps(1);
+
+            Files.AuxBitVolts = session.recordNodes{1}.recordings{1}.info.continuous.channels(end).bit_volts;
             
             save (fullfile(fileparts(ops.fbinary),['myTTLfile','_',num2str(q),'.mat']),'TTLs');
             %

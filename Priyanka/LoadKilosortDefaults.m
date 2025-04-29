@@ -14,7 +14,7 @@ handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu.m');
 
 % spike detection settings
 handles.init_from_data = 0; % generate template spikes from data
-handles.spike_det_settings.Data(1) = 2; % x, number of clusters - x times more than Nchan
+handles.spike_det_settings.Data(1) = 4; % x, number of clusters - x times more than Nchan
 handles.spike_det_settings.Data(2) = -4; % spike threshold in standard deviations (4)
 handles.filter2binary.Value = 1; % default is to save bandpassed filtered data locally to binary file
 handles.computeCAR.Value = 1; % default is to subtract the Common average reference
@@ -32,10 +32,17 @@ handles.binarypathtag = 'experiment1/recording1/continuous/Rhythm_FPGA-100.0/con
 
 % overwrite settings as per need
 switch Username
+    case {'T2', 'T3'}
+        handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/priyanka/EphysData'};
+        handles.FilePaths.Data(2) = {Username};
+        handles.recording_settings.Data(1) = 64+8; % 16 TTs + 8 aux
+        handles.recording_settings.Data(2) = 8; % aux channels
+        handles.InactiveChannels.String = mat2str([]);
+        handles.IgnoreChannels.String = mat2str([]);
     case {'Q3', 'Q4', 'Q5', 'Q8', 'Q9'} % use GUI_Kilosort_vQ
         handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
         handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/priyanka/EphysData'};
-        handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw'};
+        %handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw'};
         handles.FilePaths.Data(2) = {Username};
         handles.recording_settings.Data(1) = 40+8; % 10 TTs + 8 aux
         handles.recording_settings.Data(2) = 8; % aux channels
@@ -54,6 +61,18 @@ switch Username
         if strcmp(Username, 'Q5')
             handles.IgnoreChannels.String = mat2str([12 18 19]); % session 22-11-30
         end
+    case {'S12'} % use GUI_Kilosort_vQ
+        handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
+        handles.FilePaths.Data(1) = {'/mnt/grid-hs/mdussauz/ephysdata/lever_task/BatchS'};
+        %handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw'};
+        handles.FilePaths.Data(2) = {Username};
+        handles.recording_settings.Data(1) = 40+8; % 10 TTs + 8 aux
+        handles.recording_settings.Data(2) = 8; % aux channels
+        handles.spike_det_settings.Data(1) = 4; % x, number of clusters - x times more than Nchan
+        handles.spike_det_settings.Data(2) = -4;
+        handles.InactiveChannels.String = mat2str([]);
+        handles.IgnoreChannels.String = mat2str([]);
+        handles.binarypathtag = 'experiment1/recording1/continuous/Acquisition_Board-100.Rhythm Data/continuous.dat';
     case {'Q88'}
         handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
         handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw'};
