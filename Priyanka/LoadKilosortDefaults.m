@@ -39,6 +39,20 @@ switch Username
         handles.recording_settings.Data(2) = 8; % aux channels
         handles.InactiveChannels.String = mat2str([]);
         handles.IgnoreChannels.String = mat2str([]);
+    case {'T33'}
+        handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/ciara/DoesRunningMatter/ephys'};
+        handles.FilePaths.Data(2) = {Username(1:end-1)};
+        handles.recording_settings.Data(1) = 64+8; % 16 TTs + 8 aux
+        handles.recording_settings.Data(2) = 8; % aux channels
+        handles.InactiveChannels.String = mat2str([]);
+        handles.IgnoreChannels.String = mat2str([]);
+    case {'T22'}
+        handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/ciara/DoesRunningMatter/ephys'};
+        handles.FilePaths.Data(2) = {Username(1:end-1)};
+        handles.recording_settings.Data(1) = 64+8; % 16 TTs + 8 aux
+        handles.recording_settings.Data(2) = 8; % aux channels
+        handles.InactiveChannels.String = mat2str([]);
+        handles.IgnoreChannels.String = mat2str([]);
     case {'Q3', 'Q4', 'Q5', 'Q8', 'Q9'} % use GUI_Kilosort_vQ
         handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
         handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/priyanka/EphysData'};
