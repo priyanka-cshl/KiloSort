@@ -32,22 +32,39 @@ for k = 1:nBlocks
         
         % read the open ephys flat binary file
         session = Session(ops.root(q,:));
-        TotalSamples = size(session.recordNodes{1}.recordings{1}.continuous('Acquisition_Board-100.Rhythm Data').timestamps,1);
+        processorKey = session.recordNodes{1}.recordings{1}.continuous.keys();
+        processorKey = processorKey{1};
+        TotalSamples = size(session.recordNodes{1}.recordings{1}.continuous(processorKey).timestamps,1);
         Files.Samples(q) = TotalSamples;
-        Files.StartTimestamp(q) = session.recordNodes{1}.recordings{1}.continuous('Acquisition_Board-100.Rhythm Data').timestamps(1);
-        Files.ChBitVolts = session.recordNodes{1}.recordings{1}.info.continuous.channels(1).bit_volts;
-        
+        if ~strcmp(session.recordNodes{1}.format,'BinaryOldGui')
+            Files.StartTimestamp(q) = session.recordNodes{1}.recordings{1}.continuous(processorKey).timestamps(1);
+        else
+            samplingRate = session.recordNodes{1}.recordings{1}.info.continuous.sample_rate;
+            Files.StartTimestamp(q) = double(session.recordNodes{1}.recordings{1}.continuous(processorKey).sampleNumbers(1))/samplingRate;
+        end
+        Files.ChBitVolts(q) = session.recordNodes{1}.recordings{1}.info.continuous.channels(1).bit_volts;
+        Files.Channels = [ops.Nchan auxchans];
         if ops.saveAUXbinaryfile
             % extra step - to save in the same folder - TTL data
-            Events = session.recordNodes{1}.recordings{1}.ttlEvents('Acquisition_Board-100.Rhythm Data');
-            TTLs.data            = Events.channel;
-            TTLs.timestamps      = Events.timestamp;
+            Events = session.recordNodes{1}.recordings{1}.ttlEvents(processorKey);
+            try
+                TTLs.data            = Events.channel;
+            catch
+                TTLs.data            = Events.line;
+            end
             TTLs.info.eventId    = Events.state;
-            
-            % to adjust for clock offset between open ephys and kilosort
-            TTLs.offset = session.recordNodes{1}.recordings{1}.continuous('Acquisition_Board-100.Rhythm Data').timestamps(1);
+            if ~strcmp(session.recordNodes{1}.format,'BinaryOldGui')
+                TTLs.timestamps      = Events.timestamp;
+                % to adjust for clock offset between open ephys and kilosort
+                TTLs.offset = session.recordNodes{1}.recordings{1}.continuous(processorKey).timestamps(1);
+            else
+                %samplingRate         = session.recordNodes{1}.recordings{1}.info.continuous.sample_rate;
+                TTLs.timestamps      = double(Events.sample_number)/samplingRate;
+                % to adjust for clock offset between open ephys and kilosort
+                TTLs.offset = Files.StartTimestamp(q);
+            end
 
-            Files.AuxBitVolts = session.recordNodes{1}.recordings{1}.info.continuous.channels(end).bit_volts;
+            Files.AuxBitVolts(q) = session.recordNodes{1}.recordings{1}.info.continuous.channels(end).bit_volts;
             
             save (fullfile(fileparts(ops.fbinary),['myTTLfile','_',num2str(q),'.mat']),'TTLs');
             %
@@ -64,14 +81,14 @@ for k = 1:nBlocks
             if (offset + NTbuff) <= TotalSamples
                 if (q > 1) && (ibatch == 1)
                     samples = horzcat(samples, ...
-                        session.recordNodes{1}.recordings{1}.continuous('Acquisition_Board-100.Rhythm Data').samples(:,1:(NTbuff-nsampcurr)) );
+                        session.recordNodes{1}.recordings{1}.continuous(processorKey).samples(:,1:(NTbuff-nsampcurr)) );
                 else
                     samples = ...
-                        session.recordNodes{1}.recordings{1}.continuous('Acquisition_Board-100.Rhythm Data').samples(:,offset+(1:NTbuff));
+                        session.recordNodes{1}.recordings{1}.continuous(processorKey).samples(:,offset+(1:NTbuff));
                 end
             else
                 samples = ...
-                    session.recordNodes{1}.recordings{1}.continuous('Acquisition_Board-100.Rhythm Data').samples(:,offset+1:TotalSamples);
+                    session.recordNodes{1}.recordings{1}.continuous(processorKey).samples(:,offset+1:TotalSamples);
                     nsampcurr = size(samples,2);
                     TrailingSamps = nsampcurr;
                 if q<size(ops.root,1)

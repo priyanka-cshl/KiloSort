@@ -32,6 +32,13 @@ handles.binarypathtag = 'experiment1/recording1/continuous/Rhythm_FPGA-100.0/con
 
 % overwrite settings as per need
 switch Username
+    case 'E66'
+        handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/priyanka/EphysData'};
+        handles.FilePaths.Data(2) = {Username};
+        handles.recording_settings.Data(1) = 64+8; % 16 TTs + 8 aux
+        handles.recording_settings.Data(2) = 8; % aux channels
+        handles.InactiveChannels.String = mat2str([]);
+        handles.IgnoreChannels.String = mat2str([]);
     case {'T2', 'T3'}
         handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/priyanka/EphysData'};
         handles.FilePaths.Data(2) = {Username};
@@ -40,22 +47,26 @@ switch Username
         handles.InactiveChannels.String = mat2str([]);
         handles.IgnoreChannels.String = mat2str([]);
     case {'T33'}
-        handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/ciara/DoesRunningMatter/ephys'};
+        handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/priyanka/DoesRunningMatter/ephys'};
         handles.FilePaths.Data(2) = {Username(1:end-1)};
         handles.recording_settings.Data(1) = 64+8; % 16 TTs + 8 aux
         handles.recording_settings.Data(2) = 8; % aux channels
         handles.InactiveChannels.String = mat2str([]);
-        handles.IgnoreChannels.String = mat2str([]);
+        handles.IgnoreChannels.String = mat2str([62 63]);
+        handles.spike_det_settings.Data(2) = -3;
     case {'T22'}
-        handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/ciara/DoesRunningMatter/ephys'};
+        handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/priyanka/DoesRunningMatter/ephys'};
         handles.FilePaths.Data(2) = {Username(1:end-1)};
         handles.recording_settings.Data(1) = 64+8; % 16 TTs + 8 aux
         handles.recording_settings.Data(2) = 8; % aux channels
         handles.InactiveChannels.String = mat2str([]);
-        handles.IgnoreChannels.String = mat2str([]);
+        handles.IgnoreChannels.String = mat2str([58]);
+        handles.spike_det_settings.Data(2) = -3;
     case {'Q3', 'Q4', 'Q5', 'Q8', 'Q9'} % use GUI_Kilosort_vQ
         handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
         handles.FilePaths.Data(1) = {'/mnt/albeanu_lab/priyanka/EphysData'};
+        handles.FilePaths.Data(1) = {'/mnt/storage/Raw'};
+        handles.FilePaths.Data(3) = {'/mnt/storage/Sorted/'};
         %handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw'};
         handles.FilePaths.Data(2) = {Username};
         handles.recording_settings.Data(1) = 40+8; % 10 TTs + 8 aux
@@ -75,7 +86,17 @@ switch Username
         if strcmp(Username, 'Q5')
             handles.IgnoreChannels.String = mat2str([12 18 19]); % session 22-11-30
         end
-    case {'S12'} % use GUI_Kilosort_vQ
+    case {'E2'}
+        handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
+        handles.FilePaths.Data(1) = {'/mnt/storage/Raw'};
+        handles.FilePaths.Data(3) = {'/mnt/storage/Sorted/'};
+        handles.FilePaths.Data(2) = {Username};
+        handles.recording_settings.Data(1) = 32+8; % 10 TTs + 8 aux
+        handles.recording_settings.Data(2) = 8; % aux channels
+        handles.InactiveChannels.String = mat2str([]);
+        handles.IgnoreChannels.String = mat2str([]);
+        handles.binarypathtag = 'continuous.dat';
+    case {'S6','S7','S11','S12'} % use GUI_Kilosort_vQ
         handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
         handles.FilePaths.Data(1) = {'/mnt/grid-hs/mdussauz/ephysdata/lever_task/BatchS'};
         %handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw'};
