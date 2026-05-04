@@ -2,6 +2,7 @@ function [] = CreateBinaryForKS4(mousename)
 handles = [];
 handles = LoadKilosortDefaults(handles, mousename);
 handles.FilePaths.Data(1) = {'/mnt/storage/Raw'};
+handles.FilePaths.Data(1) = {'/mnt/data/cid_raw'};
 % some settings from kilosort gui
 ops.saveAUXbinaryfile = 1;
 ops.ZeroNoisyChans = 1;

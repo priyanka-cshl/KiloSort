@@ -13,18 +13,17 @@ if isempty(dir(fullfile(ops.root(1,:),'Record*','experiment*')))
         foo = dir(fullfile(ops.root, sprintf('Record Node *')));
         ops.root = fullfile(ops.root, foo.name);
         % check whats the filesaving format
-        if ~isempty(dir(fullfile(ops.root,'*CH*')))
-            ops.channeltag = '*_CH%d.continuous';
-            ops.datatype = 'oldopenEphys';
-        else
+%         if ~isempty(dir(fullfile(ops.root,'*CH*')))
+%             ops.channeltag = '*_CH%d.continuous';
+%             ops.datatype = 'oldopenEphys';
+%         else
             ops.channeltag = '*_%d.continuous';
-        end
+%         end
 %     end
 end
-ops.Nchanbinary = 32;
 if strcmp(ops.datatype , 'openEphys')
        ops = convertOpenEphysToRawBInaryAlbeanu_vQ(ops);  % convert data, only for OpenEphys
-    end
+end
 if strcmp(ops.datatype , 'oldopenEphys')
     %ops.Nchanbinary = 40;
     ops = convertOpenEphysToRawBInaryAlbeanu_vQ_openephys(ops);
