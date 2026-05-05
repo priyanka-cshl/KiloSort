@@ -143,9 +143,7 @@ end
 fclose(fidout);
 
 Files.name = ops.root;
+Files.AllSettings = ops;
 save (fullfile(fileparts(ops.fbinary),'SessionDetails.mat'),'Files');
-
-% hack
-ops.Nchanbinary = ops.Nchan;
 
 toc
