@@ -13,6 +13,9 @@ switch ops.RecordingInfo.format
     case 'OpenEphys'
         if ops.Nchan == numel(ops.RecordingInfo.ephysFiles) && ops.RecordingInfo.nAux == handles.recording_settings.Data(2)
             ops = processOEPSNonBinary(ops);
+        elseif ops.Nchan + numel(ops.SkippedChannels) == numel(ops.RecordingInfo.ephysFiles) && ...
+                ops.RecordingInfo.nAux == handles.recording_settings.Data(2)
+            ops = processOEPSNonBinary(ops);
         else
             keyboard;
         end

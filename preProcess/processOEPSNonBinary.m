@@ -40,17 +40,22 @@ for k = 1:nBlocks
         Files.StartSample(nBlocks) = ops.RecordingInfo.startSample;
         save (fullfile(fileparts(ops.fbinary),['myTTLfile','_',num2str(k),'.mat']),'TTLs');
         %
-        totalchans = ops.Nchanbinary;
+        %totalchans = ops.Nchanbinary;
         auxchans = ops.NchanAux;
     else
-        totalchans = ops.Nchanbinary - ops.NchanAux;
+        %totalchans = ops.Nchanbinary - ops.NchanAux;
     end
-    
-    for j = 1:numel(ops.RecordingInfo.ephysFiles)
-        fid{j} = fopen(fullfile(ops.RecordingFolder, ops.RecordingInfo.ephysFiles{j}));
-        % discard header information
-        fseek(fid{j}, 1024, 0);
+
+    j = 0;
+    for jj = 1:numel(ops.RecordingInfo.ephysFiles)
+        if ismember(jj,ops.ActiveChannels)
+            j = j + 1;
+            fid{j} = fopen(fullfile(ops.RecordingFolder, ops.RecordingInfo.ephysFiles{jj}));
+            % discard header information
+            fseek(fid{j}, 1024, 0);
+        end
     end
+    totalchans = j;
     for k = 1:numel(ops.RecordingInfo.auxFiles)
         fid{j+k} = fopen(fullfile(ops.RecordingFolder, ops.RecordingInfo.auxFiles{k}));
         % discard header information

@@ -174,6 +174,7 @@ for i = 1:length(handles.db)   % for each session
         % if useless channels were recorded - skip them from the binary file
         [~,notConnected] = ismember(eval(handles.InactiveChannels.String), ops.ActiveChannels);
         ops.ActiveChannels(notConnected) = [];
+        ops.SkippedChannels = notConnected;
         % not sure the inactive channel works for batch Q
 
         % just parse some info to ops the way kilosort likes it
