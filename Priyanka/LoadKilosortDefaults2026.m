@@ -86,16 +86,6 @@ switch Username
         if strcmp(Username, 'Q5')
             handles.NoisyChannels.String = mat2str([12 18 19]); % session 22-11-30
         end
-    case {'E2'}
-        handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
-        handles.FilePaths.Data(1) = {'/mnt/storage/Raw'};
-        handles.FilePaths.Data(3) = {'/mnt/storage/Sorted/'};
-        handles.FilePaths.Data(2) = {Username};
-        handles.recording_settings.Data(1) = 32+8; % 10 TTs + 8 aux
-        handles.recording_settings.Data(2) = 8; % aux channels
-        handles.InactiveChannels.String = mat2str([]);
-        handles.NoisyChannels.String = mat2str([]);
-        %handles.binarypathtag = 'continuous.dat';
     case {'S6','S7','S11','S12'} % use GUI_Kilosort_vQ
         handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
         handles.FilePaths.Data(1) = {'/mnt/grid-hs/mdussauz/ephysdata/lever_task/BatchS'};
@@ -130,39 +120,7 @@ switch Username
         handles.NoisyChannels.String = mat2str([]);
         load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB64');
         handles.ReorderChannels = EIB64;
-    case {'APCB'}
-        handles.FilePaths.Data(1) = {'/mnt/grid-hs/mdussauz/ephysdata/lever_task/BatchAPC'};
-        handles.FilePaths.Data(2) = {Username};
-        handles.recording_settings.Data(1) = 32;
-        handles.InactiveChannels.String = mat2str([]);
-        handles.NoisyChannels.String = mat2str([]);
-        load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB32_new');
-        handles.ReorderChannels = EIB32_new;
-    case {'APC1'}
-        handles.FilePaths.Data(1) = {'/mnt/data/Sorted'};
-        handles.FilePaths.Data(2) = {Username};
-        handles.recording_settings.Data(1) = 64;
-        handles.InactiveChannels.String = mat2str([]);
-        handles.NoisyChannels.String = mat2str([61:64]);
-        load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB64');
-        handles.ReorderChannels = EIB64;
-    case {'APC2'}
-        handles.FilePaths.Data(1) = {'/mnt/data/Sorted'};
-        handles.FilePaths.Data(2) = {Username};
-        handles.recording_settings.Data(1) = 64;
-        handles.InactiveChannels.String = mat2str([]);
-        handles.NoisyChannels.String = mat2str([57:64]);
-        load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB64');
-        handles.ReorderChannels = EIB64;   
-    case {'APC1binary'}
-        handles.FilePaths.Data(1) = {'/mnt/data/Sorted'};
-        handles.FilePaths.Data(2) = {'APC1'};
-        handles.recording_settings.Data(1) = 72;
-        handles.auxchannels = 0;
-        handles.InactiveChannels.String = mat2str([]);
-        handles.NoisyChannels.String = mat2str([61:72]);
-        load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB64');
-        handles.ReorderChannels = horzcat(EIB64, 65:72);
+    
     case {'Blom_Behavior_Mice_Binary'}
         handles.FilePaths.Data(1) = {'/mnt/data/Sorted'};
         handles.FilePaths.Data(2) = {'E2'};
@@ -200,14 +158,56 @@ switch Username
         handles.recording_settings.Data(1) = 32;
         handles.InactiveChannels.String = mat2str([]);
         handles.NoisyChannels.String = mat2str([]);
+    case {'APC1'}
+        handles.FilePaths.Data(1) = {'/mnt/data/Sorted'};
+        handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw/'};
+        handles.FilePaths.Data(3) = {'/mnt/data/Sorted/'};
+        handles.FilePaths.Data(2) = {Username};
+        handles.recording_settings.Data(1) = 64 + 8;
+        handles.InactiveChannels.String = mat2str([]);
+        %handles.NoisyChannels.String = mat2str([61:64]);
+        handles.NoisyChannels.String = mat2str([37:40]);
+        % load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB64');
+        % handles.ReorderChannels = EIB64;
+    case {'APC2'}
+        handles.FilePaths.Data(1) = {'/mnt/data/Sorted'};
+        handles.FilePaths.Data(2) = {Username};
+        handles.recording_settings.Data(1) = 64;
+        handles.InactiveChannels.String = mat2str([]);
+        handles.NoisyChannels.String = mat2str([57:64]);
+        load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB64');
+        handles.ReorderChannels = EIB64;   
+    case {'APC1binary'}
+        handles.FilePaths.Data(1) = {'/mnt/data/Sorted'};
+        handles.FilePaths.Data(2) = {'APC1'};
+        handles.recording_settings.Data(1) = 72;
+        handles.auxchannels = 0;
+        handles.InactiveChannels.String = mat2str([]);
+        handles.NoisyChannels.String = mat2str([61:72]);
+        load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB64');
+        handles.ReorderChannels = horzcat(EIB64, 65:72);
     case {'APCB'}
         handles.FilePaths.Data(1) = {'/mnt/grid-hs/mdussauz/ephysdata/lever_task/BatchAPC'};
-        handles.FilePaths.Data(2) = {'APCB'};
-        handles.recording_settings.Data(1) = 32;
+        handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw/'};
+        handles.FilePaths.Data(3) = {'/mnt/data/Sorted/'};
+        handles.FilePaths.Data(2) = {Username};
+        handles.recording_settings.Data(1) = 32 + 8;
         handles.InactiveChannels.String = mat2str([]);
         handles.NoisyChannels.String = mat2str([]);
-        load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB32');
-        handles.ReorderChannels = EIB32;
+        % load(fullfile(KiloSortPath,'Priyanka','EIB_maps.mat'),'EIB32');
+        % handles.ReorderChannels = EIB32;
+    case {'E2', 'E3'}
+        handles.YourConfigFile = fullfile(KiloSortPath,'StandardConfig_Albeanu_Q.m');
+        % handles.FilePaths.Data(1) = {'/mnt/storage/Raw'};
+        % handles.FilePaths.Data(3) = {'/mnt/storage/Sorted/'};
+        handles.FilePaths.Data(1) = {'/mnt/data/EphysRaw/'};
+        handles.FilePaths.Data(3) = {'/mnt/data/Sorted/'};
+        handles.FilePaths.Data(2) = {Username};
+        handles.recording_settings.Data(1) = 32+8; % 10 TTs + 8 aux
+        handles.recording_settings.Data(2) = 8; % aux channels
+        handles.InactiveChannels.String = mat2str([]);
+        handles.NoisyChannels.String = mat2str([]);
+        %handles.binarypathtag = 'continuous.dat';
     % case {'E6'}
     %     handles.FilePaths.Data(1) = {'/mnt/grid-hs/mdussauz/ephysdata/Conc_id_exp'};
     %     handles.FilePaths.Data(2) = {'E6'};

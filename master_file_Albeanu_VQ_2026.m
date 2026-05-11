@@ -5,10 +5,16 @@ if ops.GPU
 end
 
 % get recording settings
-RceordingFolder = dir(fullfile(ops.root(1,:),'Record*'));
-ops.RecordingFolder = fullfile(RceordingFolder.folder,RceordingFolder.name);
+RecordingFolder = dir(fullfile(ops.root(1,:),'Record*'));
+if isempty(RecordingFolder)
+    % check if data is directly inside the main folder
+    if ~isempty(dir(fullfile(ops.root(1,:),'*.continuous')))
+        ops.RecordingFolder = fullfile(ops.root(1,:));
+    end
+else
+    ops.RecordingFolder = fullfile(RecordingFolder.folder,RecordingFolder.name);
+end
 ops.RecordingInfo = getRecordingInfo(ops.RecordingFolder);
-
 switch ops.RecordingInfo.format
     case 'OpenEphys'
         if ops.Nchan == numel(ops.RecordingInfo.ephysFiles) && ops.RecordingInfo.nAux == handles.recording_settings.Data(2)
